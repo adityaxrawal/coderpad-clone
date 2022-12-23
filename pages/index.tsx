@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import MainPage from './Component/MainPage'
+import { ScrollArea } from '@mantine/core'
 
 
 export default function Home() {
@@ -13,7 +14,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <MainPage/>
+        <ScrollArea>
+          <MainPage/>
+        </ScrollArea>
       </main>
     </>
   )

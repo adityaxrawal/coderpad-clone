@@ -10,8 +10,13 @@
   },
   "dependencies": {
     "@mantine/core": "^5.9.5",
+    "@mantine/tiptap": "^5.9.5",
     "@monaco-editor/react": "^4.4.6",
     "@next/font": "13.1.0",
+    "@tiptap/extension-highlight": "^2.0.0-beta.209",
+    "@tiptap/extension-text-align": "^2.0.0-beta.209",
+    "@tiptap/extension-underline": "^2.0.0-beta.209",
+    "@tiptap/starter-kit": "^2.0.0-beta.209",
     "@types/node": "18.11.17",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",

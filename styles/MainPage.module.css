@@ -1,0 +1,13 @@
+.Page{
+    display: inline-flex;
+    margin: 0;
+}
+
+.EditorandResults{
+    width: 83vw;
+    height: 96vh
+}
+
+.TextArea{
+    height: 500px;
+}

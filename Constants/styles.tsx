@@ -1,4 +1,4 @@
-import {Center, createStyles} from '@mantine/core'
+import { createStyles} from '@mantine/core'
 
 const Styles = createStyles((theme, _params, getRef) => {
     theme.colorScheme = 'dark';
@@ -60,14 +60,14 @@ const Styles = createStyles((theme, _params, getRef) => {
         },
       },
       Username:{
-        float: 'right',
+        // float: 'right',
         padding: '0px',
         margin: '0px',
       },
       PaneTwo:{
         backgroundColor: '#1A1B1E',
-        height: '96vh',
-        maxWidth: '42vw',
+        height: '100vh',
+        maxWidth: '45vw',
         padding: '0',
         margin: "0",
       },
@@ -85,7 +85,12 @@ const Styles = createStyles((theme, _params, getRef) => {
         padding: "10px",
         height: "300px",
         border: `3px solid wheat`,
-      }
+      },
+      RUN:{
+        // display: 'absolute',
+        top: '260px',
+        left: '530px',
+      },
     };
   });
 export default Styles;

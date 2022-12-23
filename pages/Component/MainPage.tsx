@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Navbar, Group, Code, Button, Collapse} from '@mantine/core';
+import { Navbar, Group, Code, Button, Collapse, ScrollArea, Container, Text, Modal, Paper, TextInput, Title} from '@mantine/core';
 import SplitPane, {Props, Pane} from 'react-split-pane-next';
+import { RichTextEditor, Link } from '@mantine/tiptap'; 
+import { useEditor } from '@tiptap/react';
+import Highlight from '@tiptap/extension-highlight';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
 import Editor from "@monaco-editor/react";
 import MonacoEditor from "@monaco-editor/react";
 import Files from "../../Constants/Files";
 import Styles from "../../Constants/styles";
+import style from "../../styles/MainPage.module.css";
 
 type MonacoEditor=any;
 
@@ -12,36 +19,97 @@ interface Files {
     name: string;
     language: string;
     value: string;
-  }
+}
+
 
 const MainPage =()=>{
     const { classes, cx } = Styles();
+    const [username, setUsername] = useState<string>('Your Name');
+    const [modalOpened, setModalOpened] = useState(true);
     const [opened, setOpened] = useState(false);
     const [active, setActive] = useState('JavaScript');
     const [fileName, setFileName] = useState<string>('JavaScript');
+    const [executionResult, setExecutionResult] = useState('');
     const editorRef = useRef<MonacoEditor>(null);
     const file = Files[fileName];
+    
+
+    const content =`<h2 style="text-align: center;">Welcome to Mantine rich text editor</h2>
+    <p><code>RichTextEditor</code> component focuses on usability and is designed to be as simple as possible to bring a familiar 
+    editing experience to regular users. <code>RichTextEditor</code> is based on <a href="https://tiptap.dev/" rel="noopener noreferrer" 
+    target="_blank">Tiptap.dev</a> and supports all of its features:</p><ul><li>General text formatting: <strong>bold</strong>, 
+    <em>italic</em>, <u>underline</u>, <s>strike-through</s> </li><li>Headings (h1-h6)</li><li>Sub and super scripts 
+    (<sup>&lt;sup /&gt;</sup> and <sub>&lt;sub /&gt;</sub> tags)</li><li>Ordered and bullet lists</li><li>Text align&nbsp;</li><li>And 
+    all <a href="https://tiptap.dev/extensions" target="_blank" rel="noopener noreferrer">other extensions</a></li></ul>';`
+    const editor = useEditor({
+        extensions: [StarterKit, Underline, Link, Highlight, TextAlign.configure({ types: ['heading', 'paragraph'] }),],
+        content,
+    });
+
 
     const splitPaneProps:Props={
         split:"vertical"
     }
     const paneProps:Props={
-        minSize: "15%"
+        minSize: "20%"
     }
+
+    // useEffect(()=>{
+    //     const name = prompt( "Enter your name");
+    //     if(name!=null){
+    //         setUsername(name);
+    //     }
+    // }, [])
 
     useEffect(() => {
         editorRef.current?.focus();
     }, [file?.name]);
 
-      
     
+    const handleResult=(code: string)=>{
+        let CodeSize = Buffer.byteLength(code);
+        if( CodeSize > 1024){
+            console.log(CodeSize);
+            setExecutionResult("Error");
+        }
+        else{
+            console.log(CodeSize);
+            setExecutionResult("OK");
+        }
+    }
+    const handleClick = () =>{
+        var inputName= document.getElementById('usernameInput');
+        if(inputName){
+            setUsername((inputName as HTMLInputElement).value);
+        }
+        setModalOpened(false)
+    }
     return(
-        <div style={{display: "inline-flex",}}>
-            <Navbar height={'96vh'} width={{ sm: 208 }} p="md">
+        <>
+        <Modal overlayColor='#101113' opened={modalOpened} onClose={() => setModalOpened(false)}  overlayBlur={3} centered>
+            <Container size={420} my={40}>
+                <Title
+                    align="center"
+                    sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+                >
+                    Welcome back!
+                </Title>
+
+                <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+                    <TextInput label="Your Name" placeholder="Enter Your Name" id="usernameInput"/>        
+                    <Button fullWidth mt="xl" onClick={handleClick}>
+                        Sign in
+                    </Button>
+                </Paper>
+            </Container>
+        </Modal>
+        <div className={style.Page}>
+            <div>
+            <Navbar height={'100vh'} width={{ sm: '28vh' }} p="md">
                 <Group className={classes.Navheader} position="apart">
                     <h1> CoderPad </h1>
                     <Code sx={{ fontweight: 700 }}>v3.1.2</Code>
-                    <p className={classes.Username}> Hello, Aditya!</p>
+                    <p className={classes.Username}> Hello, {username}!</p>
                 </Group>
                 <Button onClick={() => setOpened((o) => !o)}>
                     Choose Language
@@ -91,30 +159,75 @@ const MainPage =()=>{
                 </a>
                 </Group>
             </Navbar>
-
-            <div style={{width: "85vw", height: "100vh",}}>
+            </div>
+            <div className={style.EditorandResults}>
                 <SplitPane {...splitPaneProps}>
                     <Pane {...paneProps} > 
                         <Editor
-                        height="96vh"
-                        max-width="45vw"
+                        height="100vh"
+                        max-width="50vw"
                         path={file?.name}
                         defaultLanguage={file?.language}
                         defaultValue={file?.value}
                         theme="vs-dark"
                         onMount={(editor: MonacoEditor) => (editorRef.current = editor)}
                         />
-                        {/* <p>Pane1</p> */}
                     </Pane>
                     <Pane {...paneProps}>
-                        <Navbar className={classes.PaneTwo}>
-                            <Group className={classes.Result}> RESULT </Group>
-                            <div className={classes.ResultContainer}> </div>
-                        </Navbar>
+                        <Container className={classes.PaneTwo} fluid>
+                            <Navbar.Section>
+                                <Text className={classes.Result}> RESULT </Text>
+                                <Container className={classes.ResultContainer} fluid> 
+                                    {executionResult}
+                                    <Button variant="gradient" 
+                                    gradient={{ from: 'teal', to: 'blue', deg: 60 }} 
+                                    className={classes.RUN}
+                                    onClick={()=>{handleResult(file?.value)}}>
+                                        RUN
+                                    </Button>
+                                </Container>
+                            </Navbar.Section>
+                            <ScrollArea className={style.TextArea}>
+                                <RichTextEditor editor={editor}>
+                                    <RichTextEditor.Toolbar sticky>
+                                        <RichTextEditor.ControlsGroup>
+                                            <RichTextEditor.Bold />
+                                            <RichTextEditor.Italic />
+                                            <RichTextEditor.Underline />
+                                            <RichTextEditor.ClearFormatting />
+                                            <RichTextEditor.Highlight />
+                                            <RichTextEditor.Code />
+                                        </RichTextEditor.ControlsGroup>
+
+                                        <RichTextEditor.ControlsGroup>
+                                            <RichTextEditor.H1 />
+                                            <RichTextEditor.H2 />
+                                        </RichTextEditor.ControlsGroup>
+
+                                        <RichTextEditor.ControlsGroup>
+                                            <RichTextEditor.Blockquote />
+                                            <RichTextEditor.Hr />
+                                            <RichTextEditor.BulletList />
+                                            <RichTextEditor.OrderedList />
+                                        </RichTextEditor.ControlsGroup>
+
+                                        <RichTextEditor.ControlsGroup>
+                                            <RichTextEditor.AlignLeft />
+                                            <RichTextEditor.AlignCenter />
+                                            <RichTextEditor.AlignJustify />
+                                            <RichTextEditor.AlignRight />
+                                        </RichTextEditor.ControlsGroup>
+                                    </RichTextEditor.Toolbar>
+
+                                    <RichTextEditor.Content />
+                                </RichTextEditor>
+                            </ScrollArea>
+                        </Container>
                     </Pane>
                 </SplitPane>
             </div>
         </div>
+        </>
     );
 }
 export default MainPage;
