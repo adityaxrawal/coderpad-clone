@@ -60,9 +60,11 @@ const Styles = createStyles((theme, _params, getRef) => {
         },
       },
       Username:{
-        // float: 'right',
         padding: '0px',
         margin: '0px',
+      },
+      EditorPanel:{
+        display: 'relative',
       },
       PaneTwo:{
         backgroundColor: '#1A1B1E',
@@ -83,13 +85,15 @@ const Styles = createStyles((theme, _params, getRef) => {
       },
       ResultContainer:{
         padding: "10px",
-        height: "300px",
+        minHeight: "300px",
         border: `3px solid wheat`,
       },
       RUN:{
-        // display: 'absolute',
-        top: '260px',
-        left: '530px',
+        // display: 'relative',  
+        position: 'absolute',
+        top: '320px',
+        // left: '20px',
+        right: '310px',
       },
     };
   });

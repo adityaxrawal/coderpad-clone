@@ -53,14 +53,10 @@ const MainPage =()=>{
     const paneProps:Props={
         minSize: "20%"
     }
-
-    // useEffect(()=>{
-    //     const name = prompt( "Enter your name");
-    //     if(name!=null){
-    //         setUsername(name);
-    //     }
-    // }, [])
-
+    const editorProps:Props={
+        initialSize: '70%' ,
+        minSize: '20%'
+    }
     useEffect(() => {
         editorRef.current?.focus();
     }, [file?.name]);
@@ -105,7 +101,7 @@ const MainPage =()=>{
         </Modal>
         <div className={style.Page}>
             <div>
-            <Navbar height={'100vh'} width={{ sm: '28vh' }} p="md">
+            <Navbar height={'96vh'} width={{ sm: '28vh' }} p="md">
                 <Group className={classes.Navheader} position="apart">
                     <h1> CoderPad </h1>
                     <Code sx={{ fontweight: 700 }}>v3.1.2</Code>
@@ -162,22 +158,24 @@ const MainPage =()=>{
             </div>
             <div className={style.EditorandResults}>
                 <SplitPane {...splitPaneProps}>
-                    <Pane {...paneProps} > 
-                        <Editor
-                        height="100vh"
-                        max-width="50vw"
-                        path={file?.name}
-                        defaultLanguage={file?.language}
-                        defaultValue={file?.value}
-                        theme="vs-dark"
-                        onMount={(editor: MonacoEditor) => (editorRef.current = editor)}
-                        />
+                    <Pane {...editorProps}> 
+                        <Container className={classes.EditorPanel}>
+                            <Editor
+                            height='96vh'
+                            // max-width="65vw"
+                            path={file?.name}
+                            defaultLanguage={file?.language}
+                            defaultValue={file?.value}
+                            theme="vs-dark"
+                            onMount={(editor: MonacoEditor) => (editorRef.current = editor)}
+                            />
+                        </Container>
                     </Pane>
                     <Pane {...paneProps}>
-                        <Container className={classes.PaneTwo} fluid>
+                        <Container className={classes.PaneTwo}>
                             <Navbar.Section>
                                 <Text className={classes.Result}> RESULT </Text>
-                                <Container className={classes.ResultContainer} fluid> 
+                                <Container className={classes.ResultContainer}> 
                                     {executionResult}
                                     <Button variant="gradient" 
                                     gradient={{ from: 'teal', to: 'blue', deg: 60 }} 
@@ -187,26 +185,21 @@ const MainPage =()=>{
                                     </Button>
                                 </Container>
                             </Navbar.Section>
-                            <ScrollArea className={style.TextArea}>
+                            <ScrollArea style={{ height: '355px'}}>
                                 <RichTextEditor editor={editor}>
                                     <RichTextEditor.Toolbar sticky>
                                         <RichTextEditor.ControlsGroup>
                                             <RichTextEditor.Bold />
                                             <RichTextEditor.Italic />
                                             <RichTextEditor.Underline />
-                                            <RichTextEditor.ClearFormatting />
                                             <RichTextEditor.Highlight />
-                                            <RichTextEditor.Code />
                                         </RichTextEditor.ControlsGroup>
 
                                         <RichTextEditor.ControlsGroup>
                                             <RichTextEditor.H1 />
-                                            <RichTextEditor.H2 />
                                         </RichTextEditor.ControlsGroup>
 
                                         <RichTextEditor.ControlsGroup>
-                                            <RichTextEditor.Blockquote />
-                                            <RichTextEditor.Hr />
                                             <RichTextEditor.BulletList />
                                             <RichTextEditor.OrderedList />
                                         </RichTextEditor.ControlsGroup>
