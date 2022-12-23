@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Navbar, Group, Code, Button, Collapse, ScrollArea, Container, Text, Modal, Paper, TextInput, Title} from '@mantine/core';
-import SplitPane, {Props, Pane} from 'react-split-pane-next';
+import SplitPane, {PaneProps,Props, Pane} from 'react-split-pane-next';
 import { RichTextEditor, Link } from '@mantine/tiptap'; 
 import { useEditor } from '@tiptap/react';
 import Highlight from '@tiptap/extension-highlight';
@@ -50,11 +50,11 @@ const MainPage =()=>{
     const splitPaneProps:Props={
         split:"vertical"
     }
-    const paneProps:Props={
+    const paneProps:PaneProps={
         minSize: "20%"
     }
-    const editorProps:Props={
-        initialSize: '70%' ,
+    const editorProps:PaneProps={
+        initialSize: '75%',
         minSize: '20%'
     }
     useEffect(() => {
@@ -162,7 +162,7 @@ const MainPage =()=>{
                         <Container className={classes.EditorPanel}>
                             <Editor
                             height='96vh'
-                            // max-width="65vw"
+                            // min-width="70vw"
                             path={file?.name}
                             defaultLanguage={file?.language}
                             defaultValue={file?.value}

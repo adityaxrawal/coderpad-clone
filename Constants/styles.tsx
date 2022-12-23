@@ -89,11 +89,11 @@ const Styles = createStyles((theme, _params, getRef) => {
         border: `3px solid wheat`,
       },
       RUN:{
-        // display: 'relative',  
-        position: 'absolute',
-        top: '320px',
-        // left: '20px',
-        right: '310px',
+        position: 'sticky',  
+        // position: 'absolute',
+        top: '325px',
+        left: '30px',
+        // right: '50px',
       },
     };
   });
